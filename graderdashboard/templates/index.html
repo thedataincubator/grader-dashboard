@@ -14,23 +14,6 @@
 {% block content %}
 <h2>Welcome</h2>
 {{ div | safe }}
-
-<table class="table">
-    <thead>
-        <tr>
-            <th scope="col">Student</th>
-            <th scope="col">Submissions</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for ele in subs %}
-          <tr>
-              <td><a href="/student/{{ ele.name }}">{{ ele.name }}</a></td>
-              <td>{{ ele.subs }}</td>
-          </tr>
-        {% endfor %}       
-    </tbody>
-</table>
 {% endblock %}
 {% block javascript %}
 {{ script | safe }}

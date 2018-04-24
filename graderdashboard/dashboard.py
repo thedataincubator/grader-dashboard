@@ -38,7 +38,7 @@ def create_app(db_uri, brand):
         subs = [overview[i] for i in days]
 
         p1 = figure(x_axis_type='datetime', plot_height=250,
-                    title='Submissiosn per Day')
+                    title='Submissions per Day')
         plot_days = [datetime.strptime(i, "%Y-%m-%d") for i in days]
         p1.line(plot_days, subs)
         p1.circle(plot_days, subs)
@@ -46,13 +46,16 @@ def create_app(db_uri, brand):
 
     @app.route('/')
     def index():
-        subs = gs.overview()
         overview = gs.day_overview()
         script, div = components(_plot_subs(overview))
         return render_with_brand('index.html', 
-                                 subs=subs,
                                  div=div,
                                  script=script)
+
+    @app.route('/students')
+    def students():
+        subs = gs.overview()
+        return render_with_brand('students.html', subs=subs)
 
     @app.route('/student/<student>')
     def student_overview(student):
