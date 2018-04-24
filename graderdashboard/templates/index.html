@@ -1,7 +1,19 @@
 {% extends 'base.html' %}
+{% block css %}
+<link
+    href="https://cdn.pydata.org/bokeh/release/bokeh-0.12.15.min.css"
+    rel="stylesheet" type="text/css">
+<link
+    href="https://cdn.pydata.org/bokeh/release/bokeh-widgets-0.12.15.min.css"
+    rel="stylesheet" type="text/css">
+<link
+    href="https://cdn.pydata.org/bokeh/release/bokeh-tables-0.12.15.min.css"
+    rel="stylesheet" type="text/css">
 
+{% endblock %}
 {% block content %}
 <h2>Welcome</h2>
+{{ div | safe }}
 
 <table class="table">
     <thead>
@@ -13,10 +25,16 @@
     <tbody>
         {% for ele in subs %}
           <tr>
-              <td>{{ ele.name }}</td>
+              <td><a href="/student/{{ ele.name }}">{{ ele.name }}</a></td>
               <td>{{ ele.subs }}</td>
           </tr>
         {% endfor %}       
     </tbody>
 </table>
+{% endblock %}
+{% block javascript %}
+{{ script | safe }}
+<script src="https://cdn.pydata.org/bokeh/release/bokeh-0.12.15.min.js"></script>
+<script src="https://cdn.pydata.org/bokeh/release/bokeh-widgets-0.12.15.min.js"></script>
+<script src="https://cdn.pydata.org/bokeh/release/bokeh-tables-0.12.15.min.js"></script>
 {% endblock %}

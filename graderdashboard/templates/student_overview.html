@@ -1,22 +1,44 @@
 {% extends 'base.html' %}
+{% block css %}
+<link
+    href="https://cdn.pydata.org/bokeh/release/bokeh-0.12.15.min.css"
+    rel="stylesheet" type="text/css">
+<link
+    href="https://cdn.pydata.org/bokeh/release/bokeh-widgets-0.12.15.min.css"
+    rel="stylesheet" type="text/css">
+<link
+    href="https://cdn.pydata.org/bokeh/release/bokeh-tables-0.12.15.min.css"
+    rel="stylesheet" type="text/css">
 
+{% endblock %}
 {% block content %}
-<h2>Welcome</h2>
+<h2>{{ name }}</h2>
+<p>{{ total }} total submissions</p>
+
+{{ div | safe }}
 
 <table class="table">
     <thead>
         <tr>
             <th scope="col">Problem</th>
             <th scope="col">Score</th>
+            <th scope="col">Submissions</th>
         </tr>
     </thead>
     <tbody>
-        {% for ele in subs %}
+        {% for ele in info %}
           <tr>
               <td>{{ ele.problem }}</td>
               <td>{{ ele.score }}</td>
+              <td>{{ ele.count }}</td>
           </tr>
         {% endfor %}       
     </tbody>
 </table>
+{% endblock %}
+{% block javascript %}
+{{ script | safe }}
+<script src="https://cdn.pydata.org/bokeh/release/bokeh-0.12.15.min.js"></script>
+<script src="https://cdn.pydata.org/bokeh/release/bokeh-widgets-0.12.15.min.js"></script>
+<script src="https://cdn.pydata.org/bokeh/release/bokeh-tables-0.12.15.min.js"></script>
 {% endblock %}
