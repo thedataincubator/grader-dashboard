@@ -93,7 +93,7 @@ def create_app(db_uri, brand):
         scores = _flatten([[projects[k].get("{}__{}".format(k, j), 0) for j in PROJECTS[k]] for k in p_names])
         source = ColumnDataSource(data=dict(x=x, 
                                             scores=scores))
-        p = figure(x_range=FactorRange(*x), plot_height=250)
+        p = figure(x_range=FactorRange(*x), plot_height=150)
         p.vbar(x='x', top='scores', source=source, width=0.9)
         
         script, div = components(column(p1, p))

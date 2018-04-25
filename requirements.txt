@@ -1,0 +1,11 @@
+gunicorn
+requests
+pip
+bokeh
+flask
+jinja2
+simplejson
+responses
+flask-sqlalchemy
+psycopg2
+bcrypt
