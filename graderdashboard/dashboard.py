@@ -2,11 +2,12 @@ from collections import defaultdict
 from itertools import chain
 from datetime import datetime
 from flask import Flask, request, render_template, request
+from flask_security import Security, SQLAlchemyUserDatastore, login_required
 from bokeh.models import ColumnDataSource, FactorRange
 from bokeh.plotting import figure
 from bokeh.embed import components
 from bokeh.layouts import column
-from .models import db
+from .models import db, User, Role
 from .gradeservice import GradeService
 
 def _flatten(x):
@@ -21,14 +22,30 @@ PROJECTS = {
     'ml':['billing_model', 'balanced_billing_model', 'demo_model', 'ensemble_model'] 
 }
 
-def create_app(db_uri, brand):
+def create_app(db_uri, brand, secret_key):
 
     app = Flask(__name__)
     app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
+    app.config['SECRET_KEY'] = secret_key
+    app.config['SECURITY_PASSWORD_SALT'] = u'2uCglNpzXZS3j+BjBu5W4ZN/CNcrHw3O8dnq+4UpcaM='
 
     db.init_app(app)
 
     gs = GradeService(db)
+
+    user_datastore = SQLAlchemyUserDatastore(db, User, Role)
+    security = Security(app, user_datastore)
+
+    @app.before_first_request
+    def create_user():
+        db.create_all()
+        try:
+            user_datastore.create_user(email='test1@test.com', 
+                                    password='asdf')
+            db.session.commit()
+        except Exception:
+            print("user already present")
+            db.session.rollback()
 
     def render_with_brand(route, **kwargs):
         return render_template(route, brand=brand, **kwargs)
@@ -45,6 +62,7 @@ def create_app(db_uri, brand):
         return p1
 
     @app.route('/')
+    @login_required
     def index():
         overview = gs.day_overview()
         script, div = components(_plot_subs(overview))
@@ -53,16 +71,19 @@ def create_app(db_uri, brand):
                                  script=script)
 
     @app.route('/students')
+    @login_required
     def students():
         subs = gs.overview()
         return render_with_brand('students.html', subs=subs)
 
     @app.route('/questions')
+    @login_required
     def questions():
         eles = gs.question_overview()
         return render_with_brand('questions.html', eles=eles)
 
     @app.route('/question/<question>')
+    @login_required
     def questeion_overview(question):
         # TODO page for each project
         overview = gs.question_info(question)
@@ -77,6 +98,7 @@ def create_app(db_uri, brand):
                                  div=div)
 
     @app.route('/student/<student>')
+    @login_required
     def student_overview(student):
         per_project = gs.student_per_project(student)
         overview = gs.student_overview(student)
