@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block content %}
+<table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Problem</th>
+                <th scope="col">Median</th>
+                <th scope="col">Submissions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for ele in eles %}
+              <tr>
+                  <td><a href="/question/{{ ele.problem }}">{{ ele.problem }}</a></td>
+                  <td>{{ "%0.2f" | format(ele.mean) }}</td>
+                  <td> {{ ele.count }}</td>
+              </tr>
+            {% endfor %}       
+        </tbody>
+    </table>
+{% endblock %}

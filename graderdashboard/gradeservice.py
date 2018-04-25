@@ -33,9 +33,6 @@ class GradeService():
             d[day] += 1
         return d
 
-    def project_overview(self):
-        pass
-
     def student_per_project(self, student):
         s = self._s.query(Grade.question, 
                           self.db.func.max(Grade.score), 
@@ -45,4 +42,27 @@ class GradeService():
         
         return [{'problem': i[0], 'score': i[1], 'count' :i[2]} for i in s]
 
+    def question_overview(self):
+        s = self._s.query(Grade.question,
+                          self.db.func.avg(Grade.score),
+                          self.db.func.count(Grade.submission_time)) \
+                          .group_by(Grade.question).all()
 
+        return [{'problem': i[0], 'mean': i[1], 'count': i[2]} for i in s]
+
+    def question_info(self, question):
+        s = self._s.query(Grade.score, Grade.submission_time) \
+                    .filter(Grade.question == question)
+        d = defaultdict(int)
+        for i in s:
+            day = i[1].strftime("%Y-%m-%d")
+            d[day] += 1
+        return d
+
+    def project_per_student(self, question):
+        s = self._s.query(Grade.name,
+                          self.db.func.max(Grade.score),
+                          self.db.func.count(Grade.submission_time)) \
+                          .filter(Grade.question == question) \
+                          .group_by(Grade.name)
+        return [{'name': i[0], 'score': i[1], 'count': i[2]} for i in s]

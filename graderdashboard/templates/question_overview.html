@@ -12,16 +12,15 @@
 
 {% endblock %}
 {% block content %}
-<a href="/students"><button type="button" class="btn btn-primary">Back to Students</button></a>
-<h2>{{ name }}</h2>
-<p>{{ total }} total submissions</p>
+<a href="/questions"><button type="button" class="btn btn-primary">Back to Questions</button></a>
+<h2>{{ question }}</h2>
 
 {{ div | safe }}
 
 <table class="table">
     <thead>
         <tr>
-            <th scope="col">Problem</th>
+            <th scope="col">Name</th>
             <th scope="col">Score</th>
             <th scope="col">Submissions</th>
         </tr>
@@ -29,7 +28,7 @@
     <tbody>
         {% for ele in info %}
           <tr>
-              <td>{{ ele.problem }}</td>
+              <td>{{ ele.name }}</td>
               <td>{{ "%0.2f" | format(ele.score) }}</td>
               <td>{{ ele.count }}</td>
           </tr>

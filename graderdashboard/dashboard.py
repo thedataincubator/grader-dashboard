@@ -57,6 +57,25 @@ def create_app(db_uri, brand):
         subs = gs.overview()
         return render_with_brand('students.html', subs=subs)
 
+    @app.route('/questions')
+    def questions():
+        eles = gs.question_overview()
+        return render_with_brand('questions.html', eles=eles)
+
+    @app.route('/question/<question>')
+    def questeion_overview(question):
+        # TODO page for each project
+        overview = gs.question_info(question)
+        per_student = gs.project_per_student(question)
+        total_submissions = sum(overview.values())
+        p = _plot_subs(overview)
+        script, div = components(p)
+        return render_with_brand('question_overview.html',
+                                 info=per_student,
+                                 question=question,
+                                 script=script,
+                                 div=div)
+
     @app.route('/student/<student>')
     def student_overview(student):
         per_project = gs.student_per_project(student)
