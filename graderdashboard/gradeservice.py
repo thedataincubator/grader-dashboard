@@ -7,13 +7,16 @@ class GradeService():
         self.db = db
         self._s = self.db.session
 
-    def day_overview(self):
-        s = self._s.query(Grade.question, Grade.submission_time)
+    def _count_days(self, s, index=1):
         d = defaultdict(int)
         for i in s:
-            day = i[1].strftime("%Y-%m-%d")
+            day = i[index].strftime("%Y-%m-%d")
             d[day] += 1
         return d
+
+    def day_overview(self):
+        s = self._s.query(Grade.question, Grade.submission_time)
+        return self._count_days(s)
 
     def overview(self):
         submissions =  self._s.query(Grade.name, 
@@ -27,11 +30,7 @@ class GradeService():
     def student_overview(self, student):
         s = self._s.query(Grade.question, Grade.submission_time) \
                           .filter(Grade.name == student)
-        d = defaultdict(int)
-        for i in s:
-            day = i[1].strftime("%Y-%m-%d")
-            d[day] += 1
-        return d
+        return self._count_days(s)
 
     def student_per_project(self, student):
         s = self._s.query(Grade.question, 
@@ -53,11 +52,7 @@ class GradeService():
     def question_info(self, question):
         s = self._s.query(Grade.score, Grade.submission_time) \
                     .filter(Grade.question == question)
-        d = defaultdict(int)
-        for i in s:
-            day = i[1].strftime("%Y-%m-%d")
-            d[day] += 1
-        return d
+        return self._count_days(s)
 
     def project_per_student(self, question):
         s = self._s.query(Grade.name,
