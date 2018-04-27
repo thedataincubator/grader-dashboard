@@ -14,5 +14,5 @@ WORKDIR /app
 
 ENV DB_URI=sqlite:////app/grades.db
 
-CMD gunicorn --bind 0.0.0.0:5000 wsgi
+CMD gunicorn --bind 0.0.0.0:$PORT wsgi
   
