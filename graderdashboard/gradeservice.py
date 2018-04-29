@@ -1,7 +1,7 @@
 from collections import defaultdict
 from .models import Grade
 
-class GradeService():
+class GradeService(object):
 
     def __init__(self, db):
         self.db = db
