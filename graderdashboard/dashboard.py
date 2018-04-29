@@ -9,6 +9,7 @@ from bokeh.embed import components
 from bokeh.layouts import column
 from .models import db, User, Role
 from .gradeservice import GradeService
+from .messageboardservice import MessageBoardService
 
 def _flatten(x):
     return tuple(chain.from_iterable(x))
@@ -32,6 +33,7 @@ def create_app(db_uri, brand, secret_key):
     db.init_app(app)
 
     gs = GradeService(db)
+    ms = MessageBoardService('')
 
     user_datastore = SQLAlchemyUserDatastore(db, User, Role)
     security = Security(app, user_datastore)
@@ -68,7 +70,9 @@ def create_app(db_uri, brand, secret_key):
         script, div = components(_plot_subs(overview))
         return render_with_brand('index.html', 
                                  div=div,
-                                 script=script)
+                                 script=script,
+                                 posts=ms.posts(),
+                                 threads=ms.threads())
 
     @app.route('/students')
     @login_required
