@@ -9,6 +9,7 @@ from bokeh.embed import components
 from bokeh.layouts import column
 from .models import db, User, Role
 from .gradeservice import GradeService
+from .api import add_v1_api_endpoints
 
 def _flatten(x):
     return tuple(chain.from_iterable(x))
@@ -28,10 +29,13 @@ def create_app(db_uri, brand, secret_key):
     app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
     app.config['SECRET_KEY'] = secret_key
     app.config['SECURITY_PASSWORD_SALT'] = u'2uCglNpzXZS3j+BjBu5W4ZN/CNcrHw3O8dnq+4UpcaM='
-
+    
     db.init_app(app)
 
     gs = GradeService(db)
+
+    add_v1_api_endpoints(app, gs)
+
 
     user_datastore = SQLAlchemyUserDatastore(db, User, Role)
     security = Security(app, user_datastore)
