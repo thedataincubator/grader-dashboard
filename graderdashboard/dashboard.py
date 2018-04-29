@@ -23,6 +23,8 @@ PROJECTS = {
     'ml':['billing_model', 'balanced_billing_model', 'demo_model', 'ensemble_model'] 
 }
 
+YOUTUBE_LINK = "https://youtube.com"
+
 def create_app(db_uri, brand, secret_key):
 
     app = Flask(__name__)
@@ -72,7 +74,8 @@ def create_app(db_uri, brand, secret_key):
                                  div=div,
                                  script=script,
                                  posts=ms.posts(),
-                                 threads=ms.threads())
+                                 threads=ms.threads(),
+                                 youtube_linke=YOUTUBE_LINK)
 
     @app.route('/students')
     @login_required
