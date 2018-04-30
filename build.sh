@@ -1,4 +1,3 @@
-# TODO GENERATE FAKE GRADES IF DEBUG
 if [[ $2 == "DEBUG" ]]; then
     python generate_debug_grades.py
 else
