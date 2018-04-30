@@ -10,20 +10,10 @@ from bokeh.layouts import column
 from .models import db, User, Role
 from .gradeservice import GradeService
 from .messageboardservice import MessageBoardService
+from .vars import PROJECTS, NEW_VIDEO_VIEWS, YOUTUBE_LINK
 
 def _flatten(x):
     return tuple(chain.from_iterable(x))
-
-PROJECTS = {
-    'dw':['summary_statistics', 'most_common_item', 'items_by_region', 'script_anomalies', 'script_growth', 'rare_scripts'],
-    'in':['problem1', 'problem2'],
-    'ip':['mersenne_numbers', 'lucas_lehmer', 'mersenne_primes', 'is_prime_fast', 'erastosthenes'],
-    'pw':['summary_statistics', 'most_common_item', 'items_by_region'],
-    'vc':['point_repr', 'add_subtract', 'multiplication', 'distance', 'k_means'],
-    'ml':['billing_model', 'balanced_billing_model', 'demo_model', 'ensemble_model'] 
-}
-
-YOUTUBE_LINK = "https://youtube.com"
 
 def create_app(db_uri, brand, secret_key):
 
@@ -75,7 +65,8 @@ def create_app(db_uri, brand, secret_key):
                                  script=script,
                                  posts=ms.posts(),
                                  threads=ms.threads(),
-                                 youtube_linke=YOUTUBE_LINK)
+                                 youtube_linke=YOUTUBE_LINK,
+                                 new_views=NEW_VIDEO_VIEWS)
 
     @app.route('/students')
     @login_required
