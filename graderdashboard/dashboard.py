@@ -25,7 +25,7 @@ def create_app(db_uri, brand, secret_key):
     db.init_app(app)
 
     gs = GradeService(db)
-    ms = MessageBoardService('')
+    ms = MessageBoardService(db)
 
     user_datastore = SQLAlchemyUserDatastore(db, User, Role)
     security = Security(app, user_datastore)
@@ -63,8 +63,9 @@ def create_app(db_uri, brand, secret_key):
         return render_with_brand('index.html', 
                                  div=div,
                                  script=script,
-                                 posts=ms.posts(),
-                                 threads=ms.threads(),
+                                 posts=ms.recent_post_count(),
+                                 posters=ms.recent_poster_count(),
+                                 threads=ms.recent_thread_count(),
                                  youtube_linke=YOUTUBE_LINK,
                                  new_views=NEW_VIDEO_VIEWS)
 

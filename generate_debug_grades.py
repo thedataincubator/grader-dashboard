@@ -23,17 +23,37 @@ def generate_grades(people):
                                    'submission_time': now + timedelta((random.random() - .5)*10)})
     return grades
 
+def generate_threads(n_threads):
+    create_time = [datetime.now() - timedelta(days=random.randint(0, 30))
+                   for _ in range(n_threads)]
 
+    return list(enumerate(create_time))
 
+def generate_posts(n_posts, threads, people):
+    posts = []
+    for i in range(n_posts):
+        if i < len(threads):
+            parent, post_time = threads[i]
+        else:
+            parent, thread_time = random.choice(threads)
+            post_time = thread_time + timedelta(days=random.randint(0, 30))
+        posts.append({'post_id': i,
+                      'parent': parent,
+                      'post_time': post_time,
+                      'user_name': random.choice(people)})
 
+    return posts
 
 def main():
     people = generate_fake_names()
     grades = generate_grades(people)
-    df = pd.DataFrame(grades).sort_values(by='submission_time')
+    grades_df = pd.DataFrame(grades).sort_values(by='submission_time')
+    threads = generate_threads(20)
+    posts = generate_posts(100, threads, people)
+    posts_df = pd.DataFrame(posts).sort_values(by='post_time')
     connection = sqlite3.connect("grades.db")
-    df.to_sql('grades', connection)
-    
+    grades_df.to_sql('grades', connection)
+    posts_df.to_sql('posts', connection)
 
 
 if __name__ == '__main__':
