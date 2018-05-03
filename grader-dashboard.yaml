@@ -1,0 +1,48 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: grader-dashboard
+spec:
+  selector:
+    app: grader-dashboard
+  ports:
+  - name: http
+    protocol: TCP
+    port: 80
+    targetPort: 5000
+  - name: https
+    protocol: TCP
+    port: 443
+    targetPort: 5000
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: grader-dashboard-deployment
+  labels:
+    app: grader-dashboard
+spec:
+  replicas: 2
+  strategy: 
+    rollingUpdate:
+      maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: grader-dashboard
+  template:
+    metadata:
+      labels:
+        app: grader-dashboard
+    spec:
+      serviceAccountName: default
+      containers:
+      - name: grader-dashboard-container
+        image: gcr.io/mooc-hub/dashboard
+        env:
+        - name: PORT
+          value: "5000"
+        resources:
+          limits:
+            memory: "6Gi"
+        ports:
+        - containerPort: 5000

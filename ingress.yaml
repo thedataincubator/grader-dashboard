@@ -1,0 +1,23 @@
+# An Ingress with 2 hosts and 3 endpoints
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: dashboard-ingress
+  namespace: grader-dashboard
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    kubernetes.io/tls-acme: 'true'
+spec:
+  rules:
+  - host: wqu-dashboard.tditrain.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: grader-dashboard
+          servicePort: 80
+
+  tls:
+    - hosts:
+      - wqu-dashboard.tditrain.com
+      secretName: kubelego-tls-dashboard
