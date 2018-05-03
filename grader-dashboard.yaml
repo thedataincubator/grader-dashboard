@@ -10,10 +10,6 @@ spec:
     protocol: TCP
     port: 80
     targetPort: 5000
-  - name: https
-    protocol: TCP
-    port: 443
-    targetPort: 5000
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
