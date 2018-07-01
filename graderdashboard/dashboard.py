@@ -12,6 +12,10 @@ from .gradeservice import GradeService
 from .messageboardservice import MessageBoardService
 from .vars import PROJECTS, NEW_VIDEO_VIEWS, YOUTUBE_LINK
 
+USERS = [
+    ('dsmodule@wqu.org', 'wqu&dash%tdi')
+]
+
 def _flatten(x):
     return tuple(chain.from_iterable(x))
 
@@ -34,8 +38,9 @@ def create_app(db_uri, brand, secret_key):
     def create_user():
         db.create_all()
         try:
-            user_datastore.create_user(email='test1@test.com', 
-                                    password='asdf')
+            for user in USERS:
+                user_datastore.create_user(email=user[0], 
+                                           password=user[1])
             db.session.commit()
         except Exception:
             print("user already present")
