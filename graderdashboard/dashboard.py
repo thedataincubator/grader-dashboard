@@ -71,7 +71,7 @@ def create_app(db_uri, brand, secret_key):
                                  posts=ms.recent_post_count(),
                                  posters=ms.recent_poster_count(),
                                  threads=ms.recent_thread_count(),
-                                 youtube_linke=YOUTUBE_LINK,
+                                 youtube_link=YOUTUBE_LINK,
                                  new_views=NEW_VIDEO_VIEWS)
 
     @app.route('/students')
