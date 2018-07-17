@@ -9,4 +9,4 @@ PROJECTS = {
 
 YOUTUBE_LINK = "https://www.youtube.com/analytics?o=U"
 
-NEW_VIDEO_VIEWS = 200
+NEW_VIDEO_VIEWS = 1481
